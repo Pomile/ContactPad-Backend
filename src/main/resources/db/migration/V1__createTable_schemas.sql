@@ -1,13 +1,17 @@
 # users
 CREATE TABLE IF NOT EXISTS users(
     user_id INT AUTO_INCREMENT PRIMARY KEY,
-    firstname VARCHAR(30) NOT NULL,
-    lastname VARCHAR(30) NOT NULL,
+    name VARCHAR(30),
+    firstName VARCHAR(30),
+    lastName VARCHAR(30),
     email VARCHAR(50) NOT NULL UNIQUE,
+    emailVerified BOOLEAN DEFAULT FALSE,
     password VARCHAR(128),
-    mobile_phone VARCHAR(15),
+    mobile_phone VARCHAR(15) NOT NULL UNIQUE,
     home_phone VARCHAR(15),
     picture TEXT(1000),
+    provider VARCHAR(30) DEFAULT 'local',
+    providerId VARCHAR(30) DEFAULT '001',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
