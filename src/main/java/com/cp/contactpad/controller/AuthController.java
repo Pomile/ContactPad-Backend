@@ -9,6 +9,7 @@ import com.cp.contactpad.payload.LoginRequest;
 import com.cp.contactpad.payload.SignUpRequest;
 import com.cp.contactpad.repository.UserRepository;
 import com.cp.contactpad.security.TokenProvider;
+import com.cp.contactpad.service.auth.LoginServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,35 +26,25 @@ import java.net.URI;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    private AuthenticationManager authenticationManager;
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
-    private TokenProvider tokenProvider;
+    private LoginServiceImpl loginService;
 
     @Autowired
     public AuthController(PasswordEncoder passwordEncoder,
                           UserRepository userRepository,
+                          LoginServiceImpl loginService,
                           AuthenticationManager authenticationManager,
                           TokenProvider tokenProvider) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
-        this.authenticationManager = authenticationManager;
-        this.tokenProvider = tokenProvider;
+        this.loginService = loginService;
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String token = tokenProvider.createToken(authentication);
+        String token = loginService.login(loginRequest);
         return ResponseEntity.ok(new AuthResponse(token));
     }
 
