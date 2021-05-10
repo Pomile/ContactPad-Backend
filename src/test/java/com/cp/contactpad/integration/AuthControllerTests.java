@@ -1,5 +1,5 @@
 package com.cp.contactpad.integration;
 
-public class AuthTests {
+public class AuthControllerTests {
 
 }
