@@ -36,7 +36,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
         if (result.isValid()) {
             return true;
         }
-        String messages = "Passowrd must contain at least one 0-9, A-Z, and symbols - # $ %";
+        String messages = "Password must contain at least one digit, capital letter, and symbol - # $ %";
         context.buildConstraintViolationWithTemplate(messages)
                 .addConstraintViolation()
                 .disableDefaultConstraintViolation();

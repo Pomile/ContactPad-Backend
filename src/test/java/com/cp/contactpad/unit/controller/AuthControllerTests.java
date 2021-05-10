@@ -68,6 +68,7 @@ public class AuthControllerTests {
         signUpRequest.setGender("male");
         signUpRequest.setEmail("ogedengbe123@gmail");
         signUpRequest.setPassword("criTical@2021");
+        signUpRequest.setConfirmPassword("criTical@2021");
         signUpRequest.setMobile_phone("09084445422");
         this.signUpRequest = signUpRequest;
 
@@ -105,12 +106,13 @@ public class AuthControllerTests {
     }
 
     @Order(2)
-    @DisplayName("it should not signup a user with in correct email or password")
+    @DisplayName("it should not signup a user with invalid password")
     @Test
     public void invalidRegistrationPassword() throws Exception {
-        String msg = "Passowrd must contain at least one 0-9, A-Z, and symbols - # $ %";
+        String msg = "Password must contain at least one digit, capital letter, and symbol - # $ %";
         given(signUpService.signUp(any())).willReturn(user);
         this.signUpRequest.setPassword("mummywap");
+        this.signUpRequest.setConfirmPassword("mummywap");
         mvc.perform(post("/auth/signup")
                 .content(json.write(signUpRequest).getJson())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -121,13 +123,33 @@ public class AuthControllerTests {
 
     }
 
+
     @Order(3)
+    @DisplayName("it should not signup a user with password mismatch")
+    @Test
+    public void passwordMismatch() throws Exception {
+        String msg = "must match password";
+        given(signUpService.signUp(any())).willReturn(user);
+        this.signUpRequest.setPassword("criTical@2021");
+        this.signUpRequest.setConfirmPassword("mummywap");
+        mvc.perform(post("/auth/signup")
+                .content(json.write(signUpRequest).getJson())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.errors[0].confirmPassword").value(msg));
+
+    }
+
+    @Order(4)
     @DisplayName("it should not signup a user with in correct email")
     @Test
     public void invalidRegistrationFirstName() throws Exception {
         String error = "FirstName must not be empty";
         given(signUpService.signUp(any())).willReturn(user);
         this.signUpRequest.setPassword("criTical@2021");
+        this.signUpRequest.setConfirmPassword("criTical@2021");
         this.signUpRequest.setFirstName("");
         mvc.perform(post("/auth/signup")
                 .content(json.write(signUpRequest).getJson())

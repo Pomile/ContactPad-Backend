@@ -1,5 +1,6 @@
 package com.cp.contactpad.payload;
 
+import com.cp.contactpad.validation.FieldMismatch;
 import com.cp.contactpad.validation.ValidPassword;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Data
+@FieldMismatch(first="password", second = "confirmPassword", message = "must match password")
 public class SignUpRequest implements Serializable {
     private String name;
     @NotBlank(message = "FirstName must not be empty")
@@ -32,9 +34,12 @@ public class SignUpRequest implements Serializable {
     private String gender;
 
     @NotBlank(message = "Please enter a password")
-    @Size(min = 8, max = 100, message = "Password length must 8 and above")
+    @Size(min = 8, max = 16, message = "Password length must 8 and above")
     @ValidPassword
     @JsonProperty
     private String password;
+
+    @NotBlank(message = "Pleas confirm your password")
+    private String confirmPassword;
 
 }
