@@ -34,7 +34,7 @@ public class AuthController {
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         String token = loginService.login(loginRequest);
-        return ResponseEntity.ok(new AuthResponse(token));
+        return ResponseEntity.ok(new AuthResponse(token, "Bearer"));
     }
 
     @PostMapping("/signup")

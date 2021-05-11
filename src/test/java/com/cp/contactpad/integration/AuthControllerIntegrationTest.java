@@ -1,6 +1,7 @@
 package com.cp.contactpad.integration;
 
 import com.cp.contactpad.payload.ApiResponse;
+import com.cp.contactpad.payload.AuthResponse;
 import org.flywaydb.core.Flyway;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +33,7 @@ public class AuthControllerIntegrationTest {
     Flyway flyway;
     private HttpHeaders  httpHeaders;
     private JSONObject UserObj;
+    private JSONObject Credentials;
     private String url;
 
 
@@ -40,7 +42,7 @@ public class AuthControllerIntegrationTest {
     public void setUp() throws JSONException {
         flyway.clean();
         flyway.migrate();
-        this.url = "http://localhost:" + port + "/auth/signup";
+        this.url = "http://localhost:" + port;
         this.httpHeaders = new HttpHeaders();
         this.httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         this.UserObj = new JSONObject();
@@ -52,6 +54,11 @@ public class AuthControllerIntegrationTest {
         UserObj.put("password", "passOword@2021");
         UserObj.put("confirmPassword", "passOword@2021");
 
+        this.Credentials = new JSONObject();
+        Credentials.put("email", "ogedengbe123@gmail.com");
+        Credentials.put("password", "passOword@2021");
+
+
     }
 
     @Order(1)
@@ -59,10 +66,21 @@ public class AuthControllerIntegrationTest {
     public void registerUser() {
         HttpEntity<String> request =
                 new HttpEntity<String>(UserObj.toString(), httpHeaders);
-        ApiResponse response = restTemplate.postForObject(url, request, ApiResponse.class);
+        ApiResponse response = restTemplate.postForObject(url + "/auth/signup", request, ApiResponse.class);
         assertNotNull(response);
         assertTrue(response.isSuccess());
         assertEquals("User registered successfully@", response.getMessage());
+    }
+
+    @Order(2)
+    @Test
+    public void login() {
+
+        HttpEntity<String> request =
+                new HttpEntity<String>(Credentials.toString(), httpHeaders);
+        AuthResponse response = restTemplate.postForObject(url + "/auth/login", request, AuthResponse.class);
+        assertNotNull(response);
+        assertNotNull(response.getAccessToken());
     }
 
 

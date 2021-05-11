@@ -161,7 +161,7 @@ public class AuthControllerTests {
 
     }
 
-    @Order(4)
+    @Order(5)
     @DisplayName("it should log in a user")
     @Test
     public void login() throws Exception {
