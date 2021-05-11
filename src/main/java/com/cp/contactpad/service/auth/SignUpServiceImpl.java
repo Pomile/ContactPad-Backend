@@ -26,8 +26,6 @@ public class SignUpServiceImpl implements SignUpService{
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new BadRequestException("Email address already in use.");
         }
-        System.out.println(signUpRequest.toString());
-        // Creating user's account
         User user = new User();
         user.setFirstName(signUpRequest.getFirstName());
         user.setLastName(signUpRequest.getLastName());
