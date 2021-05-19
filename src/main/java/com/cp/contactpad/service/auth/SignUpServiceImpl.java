@@ -31,6 +31,7 @@ public class SignUpServiceImpl implements SignUpService{
         user.setLastName(signUpRequest.getLastName());
         user.setMobile_phone(signUpRequest.getMobile_phone());
         user.setEmail(signUpRequest.getEmail());
+        user.setGender(signUpRequest.getGender());
         user.setPassword(signUpRequest.getPassword());
         String local = AuthProvider.local.toString();
         user.setProvider(local);
