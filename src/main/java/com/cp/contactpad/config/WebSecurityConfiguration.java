@@ -10,6 +10,7 @@ import com.cp.contactpad.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -43,12 +44,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
     @Autowired
-    public WebSecurityConfiguration(Environment env,
-                                    HttpCookieOAuth2AuthorizationRequestRepository
+    public WebSecurityConfiguration(@Lazy Environment env,
+                                    @Lazy HttpCookieOAuth2AuthorizationRequestRepository
                                             httpCookieOAuth2AuthorizationRequestRepository,
-                                    CustomOAuth2UserService customOAuth2UserService,
-                                    OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler,
-                                    OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler) {
+                                    @Lazy CustomOAuth2UserService customOAuth2UserService,
+                                    @Lazy OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler,
+                                    @Lazy OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler) {
         this.CLIENT_PROPERTY_KEY = "spring.security.oauth2.client.registration.";
         this.env = env;
         this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;

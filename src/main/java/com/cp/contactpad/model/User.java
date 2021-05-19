@@ -23,6 +23,8 @@ public class User {
     private String email;
 
     private String picture;
+    @Column(nullable = false)
+    private String gender;
 
     @Column(nullable = false)
     private Boolean emailVerified = false;
